@@ -56,8 +56,10 @@ class Language extends Controller
     public function back($locale, Request $request)
     {
         $this->setLocale($locale, $request);
+	dd($locale);
 
         $session = $request->session();
+	$previous_url = substr($previous_url, 2); // remove the old locale string (eg: 'fr') from url.
 
         if (config('language.url')) {
             $previous_url = str_replace(env('APP_URL'), '', $session->previousUrl());
