@@ -62,11 +62,13 @@ class Language extends Controller
         if (config('language.url')) {
             $previous_url = str_replace(env('APP_URL'), '', $session->previousUrl());
 
-            if (strlen($previous_url) == 3) {
+            if (parse_url($previous_url, PHP_URL_PATH) == null) {
+                $previous_url = null;
+            } else if (strlen($previous_url) == 3 || strlen($previous_url) == 2) {
                 $previous_url = substr($previous_url, 3);
             } else {
-                $previous_url = substr($previous_url, strrpos($previous_url, '/') + 1);
-            }
+                $previous_url = substr($previous_url, strrpos($previous_url, '/'));
+	    }
 
             $url = rtrim(env('APP_URL'), '/') . '/' . $locale . '/' . ltrim($previous_url, '/');
 
